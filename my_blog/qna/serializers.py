@@ -16,3 +16,11 @@ class QuestionSerializer(serializers.ModelSerializer):
     def get_answer(self, obj):
         answer_list = obj.answers.all()
         return [{'content' : answer.content for answer in answer_list}]
+
+class QuestionCreateSerializer(serializers.Serializer):
+    content = serializers.CharField()
+
+    def create(self, validated_data):
+        print(validated_data)
+        return Question.objects.create(content=validated_data['content'])
+        pass
