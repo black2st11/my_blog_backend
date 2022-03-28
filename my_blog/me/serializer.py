@@ -24,7 +24,8 @@ class MeSerializer(serializers.ModelSerializer):
             "L" : 0,
             "I" : 3,
             "D" : 4,
-            "U" : 5
+            "U" : 6,
+            "C" : 5
         }
 
         result = [{
@@ -44,7 +45,12 @@ class MeSerializer(serializers.ModelSerializer):
         {
             "category" : '데브옵스',
             "value" : []
-        },{
+        },
+        {
+            "category" : '툴',
+            "value" : []
+        },
+        {
             "category" : '기타',
             "value" : []
         },

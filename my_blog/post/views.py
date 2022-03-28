@@ -14,7 +14,7 @@ class PostAPIView(APIView):
         posts = list(Post.objects.filter().prefetch_related('tag_cabinet', 'tag_cabinet__tag'))
         p = Paginator(posts, 1)
         serializer = PostSerializer(p.page(page).object_list, many=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+        return Response(data={"data" : serializer.data, "total" : len(posts)}, status=status.HTTP_200_OK)
 
 
 class PostDetailAPIView(APIView):
