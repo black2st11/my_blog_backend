@@ -11,8 +11,8 @@ from django.shortcuts import render
 class PostAPIView(APIView):
     def get(self, request):
         page = request.GET.get('page' , 1)
-        posts = list(Post.objects.filter().prefetch_related('tag_cabinet', 'tag_cabinet__tag'))
-        p = Paginator(posts, 1)
+        posts = list(Post.objects.filter().prefetch_related('tag_cabinet', 'tag_cabinet__tag').order_by('-created_at'))
+        p = Paginator(posts, 10)
         serializer = PostSerializer(p.page(page).object_list, many=True)
         return Response(data={"data" : serializer.data, "total" : len(posts)}, status=status.HTTP_200_OK)
 
