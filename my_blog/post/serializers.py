@@ -1,16 +1,11 @@
 from rest_framework import serializers
 from .models import Post
-
-
+from info.serializers import TagSerializer
 
 
 class PostSerializer(serializers.ModelSerializer):
-    tag = serializers.SerializerMethodField()
+    tag = TagSerializer(many=True)
 
     class Meta:
         model = Post
-        fields = ('id','title', 'tag', 'file', 'created_at', 'updated_at')
-
-    def get_tag(self, obj):
-        tag_list = obj.tag_cabinet.all()   
-        return [{"name" : tag_cabinet.tag.name} for tag_cabinet in tag_list]
+        fields = ("id", "title", "tag", "file", "created_at", "updated_at")

@@ -9,11 +9,13 @@ from info.models import Tag
 
 
 class Post(BaseModel):
-    title = models.CharField(max_length=100)
-    file = models.CharField(max_length=255, default="")
+    title = models.CharField("제목", max_length=100)
+    file = models.CharField("파일 주소", max_length=255, default="")
 
     class Meta:
         db_table = "post"
+        verbose_name = "게시판"
+        verbose_name_plural = "게시판"
 
     def __str__(self):
         return self.title

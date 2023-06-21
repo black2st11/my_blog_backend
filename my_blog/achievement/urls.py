@@ -1,4 +1,8 @@
-from django.urls import path
+from rest_framework.routers import SimpleRouter
+
 from .views import AchievementAPIView
 
-urlpatterns = [path('', AchievementAPIView.as_view())]
+router = SimpleRouter()
+router.register("", AchievementAPIView)
+
+urlpatterns = router.get_urls()

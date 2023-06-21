@@ -1,8 +1,6 @@
-from django.urls import path
-from .views import PostAPIView, PostDetailAPIView, Test
+from rest_framework.routers import SimpleRouter
+from .views import PostAPIView
 
-urlpatterns = [
-    path('/<int:id>', PostDetailAPIView.as_view()),
-    path('', PostAPIView.as_view()),
-    path('/test', Test )
-]
+router = SimpleRouter()
+router.register("", PostAPIView)
+urlpatterns = router.get_urls()

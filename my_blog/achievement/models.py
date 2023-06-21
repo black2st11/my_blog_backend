@@ -6,16 +6,28 @@ from common.models import BaseModel
 
 # Create your models here.
 class Achievement(BaseModel):
-    name = models.CharField(max_length=100)
-    start_date = models.DateField()
-    end_date = models.DateField()
-    position = models.CharField(max_length=50)
-    corp = models.ForeignKey(
-        Career, on_delete=models.CASCADE, related_name="achievements", null=True
+    owner = models.ForeignKey(
+        "me.Me",
+        on_delete=models.CASCADE,
+        related_name="achievements",
+        verbose_name="모험가",
     )
-    main_work = models.CharField(max_length=100, null=True)
+    name = models.CharField("업적 명", max_length=100)
+    start_date = models.DateField("시작날짜")
+    end_date = models.DateField("종료날짜")
+    position = models.CharField("직책", max_length=50)
+    corp = models.ForeignKey(
+        Career,
+        on_delete=models.CASCADE,
+        related_name="achievements",
+        null=True,
+        verbose_name="회사",
+    )
+    main_work = models.CharField("주요 업무", max_length=100, null=True)
 
     class Meta:
+        verbose_name_plural = "업적"
+        verbose_name = "업적"
         db_table = "achievement"
 
     def __str__(self):

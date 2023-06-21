@@ -13,16 +13,21 @@ class Dungeon(BaseModel):
         HARD = 4
         HELL = 5
 
-    name = models.CharField(max_length=100, default="정의되지 않은 던전")
-    start_date = models.DateField()
-    end_date = models.DateField()
-    difficulty = models.IntegerField(choices=Difficulties.choices)
-    size = models.CharField(max_length=20)
-    loc = models.CharField(max_length=50)
-    impression = models.TextField()
+    owner = models.ForeignKey(
+        "me.Me", on_delete=models.CASCADE, related_name="dungeons", verbose_name="모험가"
+    )
+    name = models.CharField("던전명", max_length=100, default="정의되지 않은 던전")
+    start_date = models.DateField("진입날짜")
+    end_date = models.DateField("클리어날짜")
+    difficulty = models.IntegerField("난이도", choices=Difficulties.choices)
+    size = models.CharField("인원", max_length=20)
+    loc = models.CharField("위치", max_length=50)
+    impression = models.TextField("후기")
 
     class Meta:
         db_table = "dungeon"
+        verbose_name = "던전"
+        verbose_name_plural = "던전"
 
     def __str__(self):
         return self.name

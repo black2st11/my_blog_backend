@@ -1,4 +1,8 @@
-from django.urls import path
+from rest_framework.routers import SimpleRouter
+
 from .views import DungeonAPIView
 
-urlpatterns = [path('', DungeonAPIView.as_view())]
+router = SimpleRouter()
+router.register("", DungeonAPIView)
+
+urlpatterns = router.get_urls()

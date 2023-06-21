@@ -1,4 +1,9 @@
-from django.urls import path
+from rest_framework.routers import SimpleRouter
+
 from .views import CarrerAPIView
 
-urlpatterns = [path('', CarrerAPIView.as_view())]
+
+router = SimpleRouter()
+router.register("", CarrerAPIView)
+
+urlpatterns = router.get_urls()

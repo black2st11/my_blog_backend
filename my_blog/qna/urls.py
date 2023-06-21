@@ -1,4 +1,7 @@
-from django.urls import path
+from rest_framework.routers import SimpleRouter
 from .views import QuestionAPIView
 
-urlpatterns = [path('', QuestionAPIView.as_view())]
+router = SimpleRouter()
+router.register("", QuestionAPIView)
+
+urlpatterns = router.get_urls()

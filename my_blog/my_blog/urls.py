@@ -18,15 +18,16 @@ from django.urls import path, include
 import debug_toolbar
 from django.conf.urls.static import static
 from django.conf import settings
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('me', include('me.urls')),
-    path('achievement', include('achievement.urls')),
-    path('dungeon', include('dungeon.urls')),
-    path('career', include('career.urls')),
-    path('post', include('post.urls')),
-    path('question', include('qna.urls')),
-    path('main', include('main.urls'))
+    path("admin/", admin.site.urls),
+    path("me/", include("me.urls")),
+    path("achievement/", include("achievement.urls")),
+    path("dungeon/", include("dungeon.urls")),
+    path("career/", include("career.urls")),
+    path("post/", include("post.urls")),
+    path("question/", include("qna.urls")),
+    path("main/", include("main.urls")),
 ]
 
 # urlpatterns +=[

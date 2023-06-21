@@ -5,14 +5,19 @@ from common.models import BaseModel
 
 # Create your models here.
 class Career(BaseModel):
-    name = models.CharField(max_length=50)
-    position = models.CharField(max_length=50)
-    work = models.CharField(max_length=50)
-    start_date = models.DateField()
-    end_date = models.DateField()
+    owner = models.ForeignKey(
+        "me.Me", on_delete=models.CASCADE, related_name="careers", verbose_name="모험가"
+    )
+    name = models.CharField("길드명", max_length=50)
+    position = models.CharField("직책", max_length=50)
+    work = models.CharField("맡은 일", max_length=50)
+    start_date = models.DateField("시작날짜")
+    end_date = models.DateField("종료날짜")
 
     class Meta:
         db_table = "career"
+        verbose_name = "길드"
+        verbose_name_plural = "길드"
 
     def __str__(self):
         return self.name
