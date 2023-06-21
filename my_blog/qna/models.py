@@ -1,17 +1,18 @@
 from django.db import models
 
+from common.models import BaseModel
+
 # Create your models here.
 
-class Question(models.Model):
+
+class Question(BaseModel):
     ip = models.CharField(max_length=50, null=True)
     content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     is_completed = models.BooleanField(default=False)
 
-class Answer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
+
+class Answer(BaseModel):
+    question = models.ForeignKey(
+        Question, on_delete=models.CASCADE, related_name="answers"
+    )
     content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    

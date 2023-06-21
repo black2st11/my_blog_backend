@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "my-blog"
+version = "0.1.0"
+description = ""
+authors = ["moon <black2st11@gmail.com>"]
+readme = "README.md"
+packages = [{include = "my_blog"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^4.2.2"
+djangorestframework = "^3.14.0"
+django-cors-headers = "^4.1.0"
+
+
+[tool.poetry.group.dev.dependencies]
+django-debug-toolbar = "^4.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

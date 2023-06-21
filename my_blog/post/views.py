@@ -1,28 +1,41 @@
-from django.shortcuts import render
+from common import GetViewSet
 from .models import Post
-from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework.response import Response
 from .serializers import PostSerializer
-from django.core.paginator import Paginator
-from django.shortcuts import render
+
 # Create your views here.
 
-class PostAPIView(APIView):
-    def get(self, request):
-        page = request.GET.get('page' , 1)
-        posts = list(Post.objects.filter().prefetch_related('tag_cabinet', 'tag_cabinet__tag').order_by('-created_at'))
-        p = Paginator(posts, 10)
-        serializer = PostSerializer(p.page(page).object_list, many=True)
-        return Response(data={"data" : serializer.data, "total" : len(posts)}, status=status.HTTP_200_OK)
+
+class PostAPIView(GetViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer()
 
 
-class PostDetailAPIView(APIView):
-    def get(self, request, id):
-        post = list(Post.objects.filter(id=id).prefetch_related('tag_cabinet', 'tag_cabinet__tag'))
-        serializer = PostSerializer(post[0])
+#     def get(self, request):
+#         page = request.GET.get("page", 1)
+#         posts = list(
+#             Post.objects.filter()
+#             .prefetch_related("tag_cabinet", "tag_cabinet__tag")
+#             .order_by("-created_at")
+#         )
+#         p = Paginator(posts, 10)
+#         serializer = PostSerializer(p.page(page).object_list, many=True)
+#         return Response(
+#             data={"data": serializer.data, "total": len(posts)},
+#             status=status.HTTP_200_OK,
+#         )
 
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
-def Test(request):
-    return render(request, 'post/test.html')
+# class PostDetailAPIView(APIView):
+#     def get(self, request, id):
+#         post = list(
+#             Post.objects.filter(id=id).prefetch_related(
+#                 "tag_cabinet", "tag_cabinet__tag"
+#             )
+#         )
+#         serializer = PostSerializer(post[0])
+
+#         return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+# def Test(request):
+#     return render(request, "post/test.html")
