@@ -7,7 +7,7 @@ from common.models import BaseModel
 # Create your models here.
 class Achievement(BaseModel):
     owner = models.ForeignKey(
-        "me.Me",
+        "hunter.Hunter",
         on_delete=models.CASCADE,
         related_name="achievements",
         verbose_name="모험가",

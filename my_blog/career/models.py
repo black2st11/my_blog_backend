@@ -6,7 +6,10 @@ from common.models import BaseModel
 # Create your models here.
 class Career(BaseModel):
     owner = models.ForeignKey(
-        "me.Me", on_delete=models.CASCADE, related_name="careers", verbose_name="모험가"
+        "hunter.Hunter",
+        on_delete=models.CASCADE,
+        related_name="careers",
+        verbose_name="모험가",
     )
     name = models.CharField("길드명", max_length=50)
     position = models.CharField("직책", max_length=50)

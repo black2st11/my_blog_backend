@@ -21,13 +21,13 @@ from django.conf import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("me/", include("me.urls")),
-    path("achievement/", include("achievement.urls")),
-    path("dungeon/", include("dungeon.urls")),
-    path("career/", include("career.urls")),
-    path("post/", include("post.urls")),
-    path("question/", include("qna.urls")),
-    path("main/", include("main.urls")),
+    path("hunters/", include("hunter.urls")),
+    path("achievements/", include("achievement.urls")),
+    path("dungeons/", include("dungeon.urls")),
+    path("careers/", include("career.urls")),
+    path("posts/", include("post.urls")),
+    path("questions/", include("qna.urls")),
+    path("mains/", include("main.urls")),
 ]
 
 # urlpatterns +=[

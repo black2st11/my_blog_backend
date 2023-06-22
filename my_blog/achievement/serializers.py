@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from .models import Achievement, AchieveDescription, AchieveSkill
-from info.serializers import DescriptionSerializer, SkillSerializer
+from info.serializers import SkillSerializer
 
 
 class AchievementDescriptionSerializer(serializers.ModelSerializer):

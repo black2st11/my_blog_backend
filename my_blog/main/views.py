@@ -2,13 +2,13 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from me.models import Me
+from hunter.models import Hunter
 from career.models import Career
 from dungeon.models import Dungeon
 from post.models import Post
 from qna.models import Question
 from achievement.models import Achievement
-from me.serializer import MeSerializer
+from hunter.serializer import HunterSerializer
 from career.serializers import CareerSerializer
 from dungeon.serializers import DungeonSerializer
 from post.serializers import PostSerializer
@@ -21,7 +21,7 @@ from achievement.serializers import AchievementSerializer
 class MainAPIView(APIView):
     def get(self, request):
         me = (
-            Me.objects.all()
+            Hunter.objects.all()
             .prefetch_related(
                 "my_skill",
                 "my_skill__skill",
@@ -58,7 +58,7 @@ class MainAPIView(APIView):
             Post.objects.filter().prefetch_related("tag_cabinet", "tag_cabinet__tag")
         )
         questions = list(Question.objects.filter().prefetch_related("answers"))
-        me_serial = MeSerializer(me[0])
+        me_serial = HunterSerializer(me[0])
         achieve_serial = AchievementSerializer(achievement[:3], many=True)
         career_serial = CareerSerializer(careers[:3], many=True)
         dungeons_serial = DungeonSerializer(dungeons[:3], many=True)

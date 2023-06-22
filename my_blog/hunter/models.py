@@ -5,20 +5,21 @@ from info.models import Skill, Description
 # Create your models here.
 
 
-class Me(BaseModel):
+class Hunter(BaseModel):
     name = models.CharField("이름", default="", max_length=30)
     phone = models.CharField("연락처", default="00000000000", max_length=12)
     birth = models.DateField("생년월일")
     email = models.EmailField("이메일")
     edu = models.CharField("학력", default="", max_length=100)
     address = models.CharField("주소", default="", max_length=100)
-    skills = models.ManyToManyField(Skill, related_name="hunter", through="me.MySkill")
+    skills = models.ManyToManyField(
+        Skill, related_name="hunter", through="hunter.MySkill"
+    )
     archiving = models.ForeignKey(
-        "me.Archiving", on_delete=models.CASCADE, related_name="hunter"
+        "hunter.Archiving", on_delete=models.CASCADE, related_name="hunter"
     )
 
     class Meta:
-        db_table = "me"
         verbose_name = "모험가"
         verbose_name_plural = "모험가"
 
@@ -27,17 +28,20 @@ class Me(BaseModel):
 
 
 class MySkill(BaseModel):
-    me = models.ForeignKey(Me, on_delete=models.DO_NOTHING)
+    hunter = models.ForeignKey(Hunter, on_delete=models.DO_NOTHING)
     skill = models.ForeignKey("info.Skill", on_delete=models.DO_NOTHING)
 
 
 class Archiving(BaseModel):
     owner = models.ForeignKey(
-        Me, on_delete=models.CASCADE, related_name="archivings", verbose_name="모험가"
+        Hunter,
+        on_delete=models.CASCADE,
+        related_name="archivings",
+        verbose_name="모험가",
     )
     category = models.CharField("주제명", max_length=20)
     descriptions = models.ManyToManyField(
-        "me.ArchDesc", related_name="archivings", through="me.ArchDesc"
+        "info.Description", related_name="archivings", through="hunter.ArchDesc"
     )
 
     class Meta:
@@ -51,12 +55,15 @@ class Archiving(BaseModel):
 
 class ArchDesc(BaseModel):
     archiving = models.ForeignKey(Archiving, on_delete=models.DO_NOTHING)
-    description = models.ForeignKey("info.Description", on_delete=models.DO_NOTHING)
+    description = models.ForeignKey(Description, on_delete=models.DO_NOTHING)
 
 
 class Education(BaseModel):
-    me = models.ForeignKey(
-        Me, on_delete=models.DO_NOTHING, related_name="educations", verbose_name="모험가"
+    hunter = models.ForeignKey(
+        Hunter,
+        on_delete=models.DO_NOTHING,
+        related_name="educations",
+        verbose_name="모험가",
     )
     name = models.CharField("훈련장명", max_length=50)
     major = models.CharField("전공", max_length=50)

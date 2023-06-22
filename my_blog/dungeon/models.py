@@ -14,7 +14,10 @@ class Dungeon(BaseModel):
         HELL = 5
 
     owner = models.ForeignKey(
-        "me.Me", on_delete=models.CASCADE, related_name="dungeons", verbose_name="모험가"
+        "hunter.Hunter",
+        on_delete=models.CASCADE,
+        related_name="dungeons",
+        verbose_name="모험가",
     )
     name = models.CharField("던전명", max_length=100, default="정의되지 않은 던전")
     start_date = models.DateField("진입날짜")

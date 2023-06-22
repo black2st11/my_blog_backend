@@ -60,3 +60,7 @@ class Tag(BaseModel):
 class Attach(BaseModel):
     name = models.CharField(max_length=20, null=True)
     file = models.FileField()
+
+    class Meta:
+        verbose_name = "첨부파일"
+        verbose_name_plural = "첨부파일"

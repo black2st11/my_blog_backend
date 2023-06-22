@@ -1,17 +1,13 @@
-from django.shortcuts import render
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
 from common import GetViewSet
-from .models import Me, Archiving
-from .serializer import MeSerializer, ArchinvingSerializer
+from .models import Hunter
+from .serializer import HunterSerializer
 
 # Create your views here.
 
 
-class MeAPIView(GetViewSet):
-    queryset = Me.objects.all()
-    serializer_class = MeSerializer
+class HunterAPIView(GetViewSet):
+    queryset = Hunter.objects.all()
+    serializer_class = HunterSerializer
 
     # def get(self, request):
     #     me = Me.objects.all().prefetch_related('my_skill' , 'my_skill__skill', 'desc_cabinet', 'desc_cabinet__description')

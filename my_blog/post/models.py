@@ -1,14 +1,16 @@
 from django.db import models
 from common.models import BaseModel
-from info.models import Tag
+from info.models import Tag, Attach
 
 # Create your models here.
 
 
 class Post(BaseModel):
     title = models.CharField("제목", max_length=100)
-    file = models.CharField("파일 주소", max_length=255, default="")
     tags = models.ManyToManyField(Tag, related_name="posts", through="post.PostTag")
+    attach = models.ManyToManyField(
+        Attach, related_name="posts", through="post.PostAttach"
+    )
 
     class Meta:
         db_table = "post"
@@ -20,8 +22,10 @@ class Post(BaseModel):
 
 
 class PostTag(BaseModel):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="tag_cabinet")
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
 
-    class Meta:
-        db_table = "post_tag"
+
+class PostAttach(BaseModel):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    attach = models.ForeignKey(Attach, on_delete=models.CASCADE)
