@@ -1,5 +1,5 @@
 from django.db import models
-from info.models import Skill, Description, File
+from info.models import Skill, Description, Attach
 from career.models import Career
 from common.models import BaseModel
 
@@ -24,6 +24,17 @@ class Achievement(BaseModel):
         verbose_name="회사",
     )
     main_work = models.CharField("주요 업무", max_length=100, null=True)
+    descriptions = models.ManyToManyField(
+        "info.Description",
+        related_name="achievements",
+        through="achievement.AchieveDescription",
+    )
+    skills = models.ManyToManyField(
+        "info.Skill", related_name="achievements", through="achievement.AchieveSkill"
+    )
+    attachs = models.ManyToManyField(
+        "info.Attach", related_name="achievements", through="achievement.AchieveAttach"
+    )
 
     class Meta:
         verbose_name_plural = "업적"
@@ -35,30 +46,15 @@ class Achievement(BaseModel):
 
 
 class AchieveDescription(BaseModel):
-    achievement = models.ForeignKey(
-        Achievement, on_delete=models.DO_NOTHING, related_name="desc_cabinet"
-    )
+    achievement = models.ForeignKey(Achievement, on_delete=models.DO_NOTHING)
     description = models.ForeignKey(Description, on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = "achievement_desc"
 
 
 class AchieveSkill(BaseModel):
-    achievement = models.ForeignKey(
-        Achievement, on_delete=models.DO_NOTHING, related_name="skill_cabinet"
-    )
+    achievement = models.ForeignKey(Achievement, on_delete=models.DO_NOTHING)
     skill = models.ForeignKey(Skill, on_delete=models.DO_NOTHING)
 
-    class Meta:
-        db_table = "achievement_skill"
 
-
-class AchieveFile(BaseModel):
-    achievement = models.ForeignKey(
-        Achievement, on_delete=models.DO_NOTHING, related_name="file_cabinet"
-    )
-    file = models.ForeignKey(File, on_delete=models.DO_NOTHING)
-
-    class Meta:
-        db_table = "achievement_file"
+class AchieveAttach(BaseModel):
+    achievement = models.ForeignKey(Achievement, on_delete=models.DO_NOTHING)
+    file = models.ForeignKey(Attach, on_delete=models.DO_NOTHING)

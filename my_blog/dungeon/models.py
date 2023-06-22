@@ -1,5 +1,5 @@
 from django.db import models
-from info.models import Skill, Description
+from info.models import Skill, Description, Attach
 from common.models import BaseModel
 
 # Create your models here.
@@ -21,8 +21,17 @@ class Dungeon(BaseModel):
     end_date = models.DateField("클리어날짜")
     difficulty = models.IntegerField("난이도", choices=Difficulties.choices)
     size = models.CharField("인원", max_length=20)
-    loc = models.CharField("위치", max_length=50)
+    address = models.CharField("위치", max_length=50)
     impression = models.TextField("후기")
+    descriptions = models.ManyToManyField(
+        Description, related_name="dungeons", through="dungeon.DungeonDescription"
+    )
+    skills = models.ManyToManyField(
+        Skill, related_name="dungeons", through="dungeon.DungeonSkill"
+    )
+    attachs = models.ManyToManyField(
+        Attach, related_name="dungeons", through="dungeon.DungeonAttach"
+    )
 
     class Meta:
         db_table = "dungeon"
@@ -42,20 +51,15 @@ class Dungeon(BaseModel):
 
 
 class DungeonDescription(BaseModel):
-    dungeon = models.ForeignKey(
-        Dungeon, on_delete=models.CASCADE, related_name="desc_cabinet"
-    )
+    dungeon = models.ForeignKey(Dungeon, on_delete=models.CASCADE)
     description = models.ForeignKey(Description, on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = "dungeon_desc"
 
 
 class DungeonSkill(BaseModel):
-    dungeon = models.ForeignKey(
-        Dungeon, on_delete=models.DO_NOTHING, related_name="skill_cabinet"
-    )
-    skill = models.ForeignKey(Skill, on_delete=models.DO_NOTHING)
+    dungeon = models.ForeignKey(Dungeon, on_delete=models.CASCADE)
+    skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
 
-    class Meta:
-        db_table = "dungeon_skill"
+
+class DungeonAttach(BaseModel):
+    dungeon = models.ForeignKey(Dungeon, on_delete=models.CASCADE)
+    attach = models.ForeignKey(Attach, on_delete=models.CASCADE)

@@ -1,5 +1,6 @@
 from common.models import BaseModel
 from django.db import models
+from info.models import Skill, Description
 
 # Create your models here.
 
@@ -11,6 +12,10 @@ class Me(BaseModel):
     email = models.EmailField("이메일")
     edu = models.CharField("학력", default="", max_length=100)
     address = models.CharField("주소", default="", max_length=100)
+    skills = models.ManyToManyField(Skill, related_name="hunter", through="me.MySkill")
+    archiving = models.ForeignKey(
+        "me.Archiving", on_delete=models.CASCADE, related_name="hunter"
+    )
 
     class Meta:
         db_table = "me"
@@ -22,11 +27,8 @@ class Me(BaseModel):
 
 
 class MySkill(BaseModel):
-    me = models.ForeignKey(Me, on_delete=models.DO_NOTHING, related_name="my_skill")
+    me = models.ForeignKey(Me, on_delete=models.DO_NOTHING)
     skill = models.ForeignKey("info.Skill", on_delete=models.DO_NOTHING)
-
-    class Meta:
-        db_table = "my_skill"
 
 
 class Archiving(BaseModel):
@@ -34,6 +36,9 @@ class Archiving(BaseModel):
         Me, on_delete=models.CASCADE, related_name="archivings", verbose_name="모험가"
     )
     category = models.CharField("주제명", max_length=20)
+    descriptions = models.ManyToManyField(
+        "me.ArchDesc", related_name="archivings", through="me.ArchDesc"
+    )
 
     class Meta:
         db_table = "archiving"
@@ -44,29 +49,9 @@ class Archiving(BaseModel):
         return self.category
 
 
-class MyDesc(BaseModel):
-    me = models.ForeignKey(
-        Me,
-        on_delete=models.DO_NOTHING,
-        related_name="desc_cabinet",
-        related_query_name="desc_cabinets",
-    )
-    description = models.ForeignKey(
-        "info.description", on_delete=models.DO_NOTHING, related_name="descs"
-    )
-
-    class Meta:
-        db_table = "my_desc"
-
-
 class ArchDesc(BaseModel):
-    archiving = models.ForeignKey(
-        Archiving, on_delete=models.DO_NOTHING, related_name="desc_cabinet"
-    )
+    archiving = models.ForeignKey(Archiving, on_delete=models.DO_NOTHING)
     description = models.ForeignKey("info.Description", on_delete=models.DO_NOTHING)
-
-    class Meta:
-        db_table = "arch_desc"
 
 
 class Education(BaseModel):

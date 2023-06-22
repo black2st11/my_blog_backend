@@ -1,5 +1,5 @@
 from django.db import models
-from info.models import Description, Skill
+from info.models import Description, Skill, Attach
 from common.models import BaseModel
 
 
@@ -13,6 +13,15 @@ class Career(BaseModel):
     work = models.CharField("맡은 일", max_length=50)
     start_date = models.DateField("시작날짜")
     end_date = models.DateField("종료날짜")
+    descriptions = models.ManyToManyField(
+        Description, related_name="careers", through="career.CareerDescription"
+    )
+    skills = models.ManyToManyField(
+        Skill, related_name="careers", through="career.CareerSkill"
+    )
+    attachs = models.ManyToManyField(
+        Attach, related_name="careers", through="career.CareerAttach"
+    )
 
     class Meta:
         db_table = "career"
@@ -32,20 +41,15 @@ class Career(BaseModel):
 
 
 class CareerDescription(BaseModel):
-    career = models.ForeignKey(
-        Career, on_delete=models.CASCADE, related_name="desc_cabinet"
-    )
+    career = models.ForeignKey(Career, on_delete=models.CASCADE)
     description = models.ForeignKey(Description, on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = "career_desc"
 
 
 class CareerSkill(BaseModel):
-    career = models.ForeignKey(
-        Career, on_delete=models.CASCADE, related_name="skill_cabinet"
-    )
+    career = models.ForeignKey(Career, on_delete=models.CASCADE)
     skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
 
-    class Meta:
-        db_table = "career_skill"
+
+class CareerAttach(BaseModel):
+    career = models.ForeignKey(Career, on_delete=models.CASCADE)
+    attach = models.ForeignKey(Attach, on_delete=models.CASCADE)

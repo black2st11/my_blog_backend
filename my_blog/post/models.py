@@ -1,7 +1,4 @@
-from pyexpat import model
-from unicodedata import category
 from django.db import models
-from rest_framework.views import APIView
 from common.models import BaseModel
 from info.models import Tag
 
@@ -11,6 +8,7 @@ from info.models import Tag
 class Post(BaseModel):
     title = models.CharField("제목", max_length=100)
     file = models.CharField("파일 주소", max_length=255, default="")
+    tags = models.ManyToManyField(Tag, related_name="posts", through="post.PostTag")
 
     class Meta:
         db_table = "post"

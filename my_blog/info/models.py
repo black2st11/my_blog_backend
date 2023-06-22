@@ -57,6 +57,6 @@ class Tag(BaseModel):
         return self.name
 
 
-class File(BaseModel):
+class Attach(BaseModel):
     name = models.CharField(max_length=20, null=True)
-    address = models.CharField(max_length=255)
+    file = models.FileField()
