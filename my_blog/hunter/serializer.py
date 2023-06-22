@@ -1,15 +1,32 @@
 from rest_framework import serializers
-from .models import Hunter, Archiving
+from .models import Hunter, Archiving, MySkill
+from info.serializers import SkillSerializer
 
 
 class HunterSerializer(serializers.ModelSerializer):
     # description = serializers.SerializerMethodField()
-    # skill = serializers.SerializerMethodField()
+    skills = SkillSerializer(many=True, read_only=True)
     # info = serializers.SerializerMethodField()
 
     class Meta:
         model = Hunter
-        fields = ["id", "name", "email", "phone", "birth", "edu", "address"]
+        fields = [
+            "id",
+            "name",
+            "email",
+            "phone",
+            "birth",
+            "edu",
+            "address",
+            "skills",
+        ]
+
+    def add_skill(self, skill_obj):
+        serializer = SkillSerializer(data=skill_obj)
+        serializer.is_valid()
+        serializer.save()
+        self.instance.skills.add(serializer.instance)
+        self.instance.refresh_from_db()
 
     # def get_description(self, obj):
     #     desc = obj.desc_cabinet.select_related("description", "me").all()
