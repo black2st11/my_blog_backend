@@ -2,8 +2,8 @@ from pydantic import BaseSettings, AnyHttpUrl
 
 
 class Settings(BaseSettings):
+    DEV_ENV: str = "local"
     PROJECT_NAME: str
-    TEST_DB_URL: str
     SECRET_KEY: str
     DEBUG: bool
     DB_ENGINE: str

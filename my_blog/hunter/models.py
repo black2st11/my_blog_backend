@@ -15,9 +15,6 @@ class Hunter(BaseModel):
     skills = models.ManyToManyField(
         Skill, related_name="hunter", through="hunter.MySkill"
     )
-    archiving = models.ForeignKey(
-        "hunter.Archiving", on_delete=models.CASCADE, related_name="hunter"
-    )
 
     class Meta:
         verbose_name = "모험가"
