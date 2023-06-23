@@ -2,6 +2,7 @@ import pytest
 from hunter.serializer import HunterSerializer
 from hunter.models import Hunter
 from info.models import Skill
+from collections import defaultdict
 
 
 @pytest.mark.django_db(transaction=True)
@@ -45,6 +46,54 @@ class TestHunter:
         serializer = HunterSerializer(hunter)
         skill_obj = {"category": Skill.CategoryOfSkill.BACKEND, "name": "Django"}
         serializer.add_skill(skill_obj=skill_obj)
-        assert serializer.instance.skills
-        assert serializer.data
-        print(serializer.data["skills"][0]["category"])
+        skill_obj = {"category": Skill.CategoryOfSkill.FRONTEND, "name": "React"}
+        serializer.add_skill(skill_obj=skill_obj)
+        assert len(serializer.instance.skills.all()) == 2
+        assert serializer.data.get("skills")["B"]
+        assert serializer.data.get("skills")["F"]
+
+    def test_add_archiving(self, create_hunter):
+        hunter = Hunter.objects.get(id=create_hunter["id"])
+        serializer = HunterSerializer(hunter)
+
+        archiving_obj = {
+            "category": "백엔드",
+            "owner_id": hunter.id,
+            "description": {"content": "매우 뛰어난 백엔드 실력"},
+        }
+
+        archiving_obj_1 = {
+            "category": "프론트엔드",
+            "owner_id": hunter.id,
+            "description": {"content": "매우 뛰어난 프론트엔드 실력"},
+        }
+
+        serializer.add_archiving(archiving_obj=archiving_obj)
+        serializer.add_archiving(archiving_obj=archiving_obj_1)
+
+        assert len(serializer.instance.archivings.all()) == 2
+        assert serializer.data.get("archivings")["백엔드"]
+        assert serializer.data.get("archivings")["프론트엔드"]
+
+    def test_add_skills(self, create_hunter):
+        hunter = Hunter.objects.get(id=create_hunter["id"])
+        serializer = HunterSerializer(hunter)
+        skill_objs = [
+            {"category": Skill.CategoryOfSkill.BACKEND, "name": "Django"},
+            {"category": Skill.CategoryOfSkill.FRONTEND, "name": "React"},
+        ]
+        serializer.add_skills(skill_objs)
+        assert len(serializer.data.get("skills")["B"]) == 1
+        assert len(serializer.data.get("skills")["F"]) == 1
+        assert serializer.data.get("skills")["B"][0]["name"] == "Django"
+
+    def test_add_archivings(self, create_hunter):
+        hunter = Hunter.objects.get(id=create_hunter["id"])
+        serializer = HunterSerializer(hunter)
+
+        description_objs = []
+        serializer.add_archiving(description_objs)
+
+        assert len(serializer.instance.archivings.all()) == 2
+        assert serializer.data.get("archivings")["백엔드"]
+        assert serializer.data.get("archivings")["프론트엔드"]
