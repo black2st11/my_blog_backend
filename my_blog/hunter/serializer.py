@@ -1,56 +1,77 @@
 from rest_framework import serializers
+from collections import defaultdict
+
 from .models import Hunter, Archiving
-
-
-class HunterSerializer(serializers.ModelSerializer):
-    description = serializers.SerializerMethodField()
-    skill = serializers.SerializerMethodField()
-    info = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Hunter
-        fields = ["description", "name", "phone", "birth", "skill", "info"]
-
-    def get_description(self, obj):
-        desc = obj.desc_cabinet.select_related("description", "me").all()
-        array = [me_desc.description.content for me_desc in desc]
-        return array
-
-    def get_skill(self, obj):
-        skills = obj.my_skill.select_related("skill").all()
-        category = {"B": 1, "F": 2, "L": 0, "I": 3, "D": 4, "U": 6, "C": 5}
-
-        result = [
-            {"category": "언어", "value": []},
-            {"category": "백엔드", "value": []},
-            {"category": "프론트", "value": []},
-            {"category": "인프라", "value": []},
-            {"category": "데브옵스", "value": []},
-            {"category": "툴", "value": []},
-            {"category": "기타", "value": []},
-        ]
-        for skill in skills:
-            result[category[skill.skill.category]]["value"].append(skill.skill.name)
-        return result
-
-    def get_info(self, obj):
-        return [
-            {"category": "이름", "value": obj.name},
-            {"category": "나이", "value": obj.birth},
-            {"category": "직업", "value": "풀스택 개발자"},
-            {"category": "선호", "value": ["백엔드", "인프라"]},
-            {"category": "학력", "value": obj.edu},
-            {"category": "사는 곳", "value": obj.loc},
-        ]
+from info.models import Skill, Description
+from common.serializers import compact_create
+from info.serializers import SkillMixin
+from info.serializers import SkillSerializer, DescriptionSerializer
 
 
 class ArchinvingSerializer(serializers.ModelSerializer):
-    description = serializers.SerializerMethodField()
+    descriptions = DescriptionSerializer(many=True, required=False)
 
     class Meta:
         model = Archiving
-        fields = ("category", "description")
+        fields = ["category", "descriptions", "owner"]
 
-    def get_description(self, obj):
-        desc_list = obj.desc_cabinet.all()
-        return [desc_cabinet.description.content for desc_cabinet in desc_list]
+
+class HunterSerializer(SkillMixin, serializers.ModelSerializer):
+    archivings = ArchinvingSerializer(many=True, required=False)
+    skills = SkillSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Hunter
+        fields = [
+            "id",
+            "name",
+            "email",
+            "phone",
+            "birth",
+            "edu",
+            "address",
+            "skills",
+            "archivings",
+        ]
+
+    # archiving description 은 여기에서만 사용하기에 Mixin으로 하지않음(추후 늘어날 경우 변경)
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        archiving_set = defaultdict(list)
+        for archiving in ret.get("archivings", []):
+            archiving_set[archiving["category"]].append(
+                {
+                    "content": description["content"]
+                    for description in archiving["descriptions"]
+                }
+            )
+        ret["archivings"] = archiving_set
+        return ret
+
+    def add_skill(self, skill_obj):
+        skill_serializer = SkillSerializer(data=skill_obj)
+        skill_serializer.is_valid()
+        skill_serializer.save()
+        self.instance.skills.add(skill_serializer.instance)
+        self.instance.refresh_from_db()
+
+    def add_skills(self, skill_objs: list):
+        skills = [Skill(**skill_obj) for skill_obj in skill_objs]
+        Skill.objects.bulk_create(skills)
+        self.instance.skills.add(*skills)
+
+    def add_archiving(self, archiving_obj):
+        data = {
+            "owner": self.instance.id,
+            "category": archiving_obj["category"],
+        }
+        description_serializer = compact_create(
+            DescriptionSerializer, archiving_obj["description"]
+        )
+        archiving_serializer = compact_create(ArchinvingSerializer, data)
+        archiving_serializer.instance.descriptions.add(description_serializer.instance)
+
+        self.instance.refresh_from_db()
+
+    def add_archivings(self, archiving_objs):
+        NotImplementedError("need to implement")
