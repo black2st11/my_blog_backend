@@ -72,6 +72,3 @@ class HunterSerializer(SkillMixin, serializers.ModelSerializer):
         archiving_serializer.instance.descriptions.add(description_serializer.instance)
 
         self.instance.refresh_from_db()
-
-    def add_archivings(self, archiving_objs):
-        NotImplementedError("need to implement")

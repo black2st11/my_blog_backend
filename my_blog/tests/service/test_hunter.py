@@ -86,14 +86,3 @@ class TestHunter:
         assert len(serializer.data.get("skills")["B"]) == 1
         assert len(serializer.data.get("skills")["F"]) == 1
         assert serializer.data.get("skills")["B"][0]["name"] == "Django"
-
-    def test_add_archivings(self, create_hunter):
-        hunter = Hunter.objects.get(id=create_hunter["id"])
-        serializer = HunterSerializer(hunter)
-
-        description_objs = []
-        serializer.add_archiving(description_objs)
-
-        assert len(serializer.instance.archivings.all()) == 2
-        assert serializer.data.get("archivings")["백엔드"]
-        assert serializer.data.get("archivings")["프론트엔드"]
