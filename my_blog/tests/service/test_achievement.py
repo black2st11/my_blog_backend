@@ -8,6 +8,7 @@ from common.serializers import compact_create
 
 @pytest.mark.django_db(transaction=True)
 class TestAchievement:
+    # TODO: end_date가 start_date 보다 뒤에 있으면 안되는 검증 로직이 필요
     def test_create_achievement(self, create_hunter):
         achievement_obj_in = {
             "owner": create_hunter["id"],
