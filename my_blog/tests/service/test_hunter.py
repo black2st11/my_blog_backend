@@ -2,7 +2,6 @@ import pytest
 from hunter.serializer import HunterSerializer
 from hunter.models import Hunter
 from info.models import Skill
-from collections import defaultdict
 
 
 @pytest.mark.django_db(transaction=True)
