@@ -2,7 +2,6 @@ import pytest
 from rest_framework.serializers import ValidationError
 
 from .utils import create_descriptions_and_skills
-from .test_hunter import create_hunter
 from common.serializers import compact_create, START_DATE_EXCEED_END_DATE
 from dungeon.models import Dungeon
 from dungeon.serializers import DungeonSerializer

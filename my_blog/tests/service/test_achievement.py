@@ -3,7 +3,6 @@ from rest_framework.serializers import ValidationError
 
 from achievement.serializers import AchievementSerializer
 from info.models import Description, Skill
-from .test_hunter import create_hunter
 from common.serializers import compact_create, START_DATE_EXCEED_END_DATE
 
 

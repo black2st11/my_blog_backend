@@ -3,7 +3,6 @@ from rest_framework.serializers import ValidationError
 
 from career.serializers import CareerSerializer
 from info.models import Description, Skill
-from .test_hunter import create_hunter, Hunter
 from common.serializers import compact_create, START_DATE_EXCEED_END_DATE
 
 

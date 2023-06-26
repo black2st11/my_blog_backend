@@ -14,6 +14,7 @@ class AchievementSerializer(
     class Meta:
         model = Achievement
         fields = [
+            "id",
             "owner",
             "name",
             "descriptions",
