@@ -51,9 +51,9 @@ class TestQna:
             "content": "이건 질문입니다.",
         }
         answer_serializer = compact_create(AnswerSerializer, answer_obj_in)
-        question_serializer.to_representation(question_serializer.instance)
-
         question_serializer.instance.refresh_from_db()
         assert question_serializer.instance
         assert answer_serializer.instance
-        assert len(question_serializer.data["answers"]) == 1
+        question = Question.objects.get(id=question_serializer.instance.id)
+        serializer = QuestionSerializer(question)
+        assert len(serializer.data["answers"]) == 1

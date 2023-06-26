@@ -1,9 +1,10 @@
 from .models import Career
 from rest_framework import serializers
 from info.serializers import DescriptionSerializer, SkillSerializer
+from common.serializers import EndDateValidationMixin
 
 
-class CareerSerializer(serializers.ModelSerializer):
+class CareerSerializer(EndDateValidationMixin, serializers.ModelSerializer):
     descriptions = DescriptionSerializer(many=True, required=False)
     skills = SkillSerializer(many=True, required=False)
     duration = serializers.SerializerMethodField()

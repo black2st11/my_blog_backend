@@ -2,9 +2,10 @@ from rest_framework import serializers
 
 from .models import Dungeon
 from info.serializers import DescriptionSerializer, SkillSerializer
+from common.serializers import EndDateValidationMixin
 
 
-class DungeonSerializer(serializers.ModelSerializer):
+class DungeonSerializer(EndDateValidationMixin, serializers.ModelSerializer):
     descriptions = DescriptionSerializer(many=True, required=False)
     skills = SkillSerializer(many=True, required=False)
     duration = serializers.SerializerMethodField()

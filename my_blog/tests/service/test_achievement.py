@@ -1,14 +1,14 @@
 import pytest
+from rest_framework.serializers import ValidationError
+
 from achievement.serializers import AchievementSerializer
-from achievement.models import Achievement
 from info.models import Description, Skill
-from .test_hunter import create_hunter, Hunter
-from common.serializers import compact_create
+from .test_hunter import create_hunter
+from common.serializers import compact_create, START_DATE_EXCEED_END_DATE
 
 
 @pytest.mark.django_db(transaction=True)
 class TestAchievement:
-    # TODO: end_date가 start_date 보다 뒤에 있으면 안되는 검증 로직이 필요
     def test_create_achievement(self, create_hunter):
         achievement_obj_in = {
             "owner": create_hunter["id"],
@@ -38,3 +38,21 @@ class TestAchievement:
         assert achievement_serializer.instance
         assert len(achievement_serializer.instance.descriptions.all()) == 3
         assert len(achievement_serializer.instance.skills.all()) == 3
+
+    def test_create_achievement_exceed_end_date(self, create_hunter):
+        achievement_obj_in = {
+            "owner": create_hunter["id"],
+            "name": "신기한 업적명",
+            "start_date": "2023-01-01",
+            "end_date": "2022-12-12",
+            "position": "신기한 직책",
+            "main_work": "신기한 주요업무",
+        }
+
+        serializer = AchievementSerializer(data=achievement_obj_in)
+
+        with pytest.raises(ValidationError) as error:
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
+        assert error.value.detail["end_date"][0] == START_DATE_EXCEED_END_DATE

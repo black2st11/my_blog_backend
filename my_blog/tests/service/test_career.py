@@ -1,8 +1,10 @@
 import pytest
+from rest_framework.serializers import ValidationError
+
 from career.serializers import CareerSerializer
 from info.models import Description, Skill
 from .test_hunter import create_hunter, Hunter
-from common.serializers import compact_create
+from common.serializers import compact_create, START_DATE_EXCEED_END_DATE
 
 
 @pytest.mark.django_db(transaction=True)
@@ -36,3 +38,20 @@ class TestCareer:
         assert career_serializer.instance
         assert len(career_serializer.instance.descriptions.all()) == 3
         assert len(career_serializer.instance.skills.all()) == 3
+
+    def test_create_career_exceed_end_date(self, create_hunter):
+        career_obj_in = {
+            "owner": create_hunter["id"],
+            "name": "매그너스 길드",
+            "position": "선임",
+            "work": "풀스택",
+            "start_date": "2023-12-01",
+            "end_date": "2023-11-30",
+        }
+
+        with pytest.raises(ValidationError) as error:
+            serializer = CareerSerializer(data=career_obj_in)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
+        assert error.value.detail["end_date"][0] == START_DATE_EXCEED_END_DATE
