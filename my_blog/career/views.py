@@ -7,7 +7,7 @@ from .serializers import CareerSerializer
 
 class CarrerAPIView(GetViewSet):
     queryset = Career.objects.all()
-    serializer_class = CareerSerializer()
+    serializer_class = CareerSerializer
 
     # def get(self, request):
     #     careers = (

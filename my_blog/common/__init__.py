@@ -1,1 +1,1 @@
-from .viewsets import GetViewSet
+from .viewsets import GetViewSet, IpMixin
