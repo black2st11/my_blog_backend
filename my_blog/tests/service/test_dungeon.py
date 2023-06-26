@@ -10,7 +10,6 @@ from dungeon.serializers import DungeonSerializer
 
 @pytest.mark.django_db(transaction=True)
 class TestDungeon:
-    # TODO: end_date가 start_date 보다 뒤에 있으면 안되는 검증 로직이 필요
     def test_create_dungeon(self, create_hunter):
         dungeon_obj_in = {
             "owner": create_hunter["id"],

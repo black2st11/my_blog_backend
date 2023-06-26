@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from common import GetViewSet
 from .models import Question
-from .serializers import QuestionSerializer, QuestionCreateSerializer
+from .serializers import QuestionSerializer
 from django.core.paginator import Paginator
 
 # Create your views here.

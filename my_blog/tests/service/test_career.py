@@ -9,7 +9,6 @@ from common.serializers import compact_create, START_DATE_EXCEED_END_DATE
 
 @pytest.mark.django_db(transaction=True)
 class TestCareer:
-    # TODO: end_date가 start_date 보다 뒤에 있으면 안되는 검증 로직이 필요
     def test_create_career(self, create_hunter):
         career_obj_in = {
             "owner": create_hunter["id"],
