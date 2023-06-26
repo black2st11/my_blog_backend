@@ -1,35 +1,39 @@
-from .models import Question, Answer
 from rest_framework import serializers
-from datetime import datetime
 from django.utils import timezone
+from datetime import datetime, time
+
+from .models import Question, Answer
+
+
+EXCEED_LIMIT_OF_TODAY_QUESTION = "오늘 5개의 질문을 등록하셨습니다."
+
+
+def create_start_end_date():
+    now = datetime.now()
+    start_date = timezone.make_aware(datetime.combine(now, time.min))
+    end_date = timezone.make_aware(datetime.combine(now, time.max))
+    return start_date, end_date
 
 
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
-        fields = "__all__"
+        fields = ["question", "id", "content"]
 
 
 class QuestionSerializer(serializers.ModelSerializer):
-    answers = AnswerSerializer(read_only=True, many=True)
+    answers = AnswerSerializer(many=True, required=False)
 
     class Meta:
         model = Question
-        fields = "__all__"
+        fields = ["id", "ip", "content", "answers"]
 
-
-class QuestionCreateSerializer(serializers.Serializer):
-    content = serializers.CharField()
-    ip = serializers.CharField()
-
-    def validate_ip(self, value):
-        today = datetime.now(tz=timezone.utc).today()
-        start_today = f"{today.year}-{today.month}-{today.day} 00:00:00"
-        end_today = f"{today.year}-{today.month}-{today.day} 23:59:59"
+    def validate_ip(self, data):
+        start_date, end_date = create_start_end_date()
         today_exist_quesiton_count = Question.objects.filter(
-            ip=value, created_at__gte=start_today, created_at__lte=end_today
+            ip=data, created__gte=start_date, created__lte=end_date
         ).count()
-        if today_exist_quesiton_count > 5:
-            raise serializers.ValidationError("오늘 5개의 질문을 등록하셨습니다.")
+        if today_exist_quesiton_count >= 5:
+            raise serializers.ValidationError(EXCEED_LIMIT_OF_TODAY_QUESTION)
 
-        return value
+        return data
