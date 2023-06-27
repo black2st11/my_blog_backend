@@ -9,8 +9,8 @@ SKILL_CATEGORY_CHOICES = [()]
 class Skill(BaseModel):
     class CategoryOfSkill(models.TextChoices):
         BACKEND = "B", ("BackEnd")
+        DB = "D", ("Database")
         FRONTEND = "F", ("FrontEnd")
-        DEVOPS = "D", ("DevOps")
         INFRA = "I", ("Infra")
         COMMUNICATION = "C", ("Communication")
         LANGUAGE = "L", ("Language")
