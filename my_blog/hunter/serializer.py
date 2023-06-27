@@ -6,6 +6,9 @@ from info.models import Skill, Description
 from common.serializers import compact_create
 from info.serializers import SkillMixin
 from info.serializers import SkillSerializer, DescriptionSerializer
+from dungeon.serializers import DungeonSerializer
+from achievement.serializers import AchievementSerializer
+from career.serializers import CareerSerializer
 
 
 class ArchinvingSerializer(serializers.ModelSerializer):
@@ -19,6 +22,9 @@ class ArchinvingSerializer(serializers.ModelSerializer):
 class HunterSerializer(SkillMixin, serializers.ModelSerializer):
     archivings = ArchinvingSerializer(many=True, required=False)
     skills = SkillSerializer(many=True, read_only=True)
+    dungeons = DungeonSerializer(many=True, read_only=True)
+    achievements = AchievementSerializer(many=True, read_only=True)
+    careers = CareerSerializer(many=True, read_only=True)
 
     class Meta:
         model = Hunter
@@ -32,21 +38,10 @@ class HunterSerializer(SkillMixin, serializers.ModelSerializer):
             "address",
             "skills",
             "archivings",
+            "dungeons",
+            "achievements",
+            "careers",
         ]
-
-    # archiving description 은 여기에서만 사용하기에 Mixin으로 하지않음(추후 늘어날 경우 변경)
-    def to_representation(self, instance):
-        ret = super().to_representation(instance)
-        archiving_set = defaultdict(list)
-        for archiving in ret.get("archivings", []):
-            archiving_set[archiving["category"]].append(
-                {
-                    "content": description["content"]
-                    for description in archiving["descriptions"]
-                }
-            )
-        ret["archivings"] = archiving_set
-        return ret
 
     def add_skill(self, skill_obj):
         skill_serializer = SkillSerializer(data=skill_obj)

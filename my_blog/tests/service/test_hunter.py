@@ -55,8 +55,8 @@ class TestHunter:
         serializer.add_archiving(archiving_obj=archiving_obj_1)
 
         assert len(serializer.instance.archivings.all()) == 2
-        assert serializer.data.get("archivings")["백엔드"]
-        assert serializer.data.get("archivings")["프론트엔드"]
+        assert serializer.data.get("archivings")[0]["category"] in ["백엔드", "프론트엔드"]
+        assert serializer.data.get("archivings")[1]["category"] in ["백엔드", "프론트엔드"]
 
     def test_add_skills(self, create_hunter):
         hunter = Hunter.objects.get(id=create_hunter["id"])
