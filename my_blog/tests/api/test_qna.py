@@ -21,7 +21,7 @@ class TestQna:
         response = client.get(url)
         assert response.status_code == 200
         assert response.data
-        assert len(response.data) == 10
+        assert len(response.data["results"]) == 5
 
     def test_get_question(self, creaet_question, client):
         first_question_id = creaet_question["data"][0].id

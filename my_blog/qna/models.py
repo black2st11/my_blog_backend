@@ -10,6 +10,7 @@ class Question(BaseModel):
     content = models.TextField("내용")
 
     class Meta:
+        ordering = ["-pk"]
         verbose_name = "질문"
         verbose_name_plural = "질문"
 
