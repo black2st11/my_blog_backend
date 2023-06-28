@@ -1,6 +1,6 @@
-from rest_framework.routers import SimpleRouter
 from .views import PostAPIView
+from common.routers import BaseRouter
 
-router = SimpleRouter(trailing_slash=False)
+router = BaseRouter(trailing_slash=False)
 router.register("", PostAPIView)
 urlpatterns = router.get_urls()

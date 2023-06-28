@@ -170,4 +170,3 @@ INTERNAL_IPS = [
     # ...
 ]
 
-APPEND_SLASH = False
