@@ -14,7 +14,10 @@ class Settings(BaseSettings):
     DB_HOST: str
     CORS_ORIGIN_WHITELIST: list[AnyHttpUrl | str]
     ALLOWED_HOSTS: list[AnyHttpUrl | str]
-
+    AWS_ACCESS_KEY_ID: str | None
+    AWS_SECRET_ACCESS_KEY: str | None
+    AWS_STORAGE_BUCKET_NAME: str | None
+    
     class Config:
         env_file = ".env"
         case_sensitive = True
