@@ -1,10 +1,10 @@
 {
-    "moonblog": {
+    "production": {
         "aws_region": "ap-northeast-2",
         "django_settings": "my_blog.settings",
         "profile_name": "default",
         "project_name": "my-blog",
-        "runtime": "python3.8",
-        "s3_bucket": "moonblog-zappa"
+        "runtime": "python3.10",
+        "s3_bucket": "moon-blog-zappa"
     }
 }

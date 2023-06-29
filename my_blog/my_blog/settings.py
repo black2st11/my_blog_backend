@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     "qna",
     "corsheaders",
     "ckeditor",
-    "ckeditor_uploader"
+    "ckeditor_uploader",
 ]
 
 MIDDLEWARE = [
@@ -153,7 +153,7 @@ USE_TZ = True
 
 STORAGES = {
     "default": {"BACKEND": "storages.backends.s3boto3.S3Boto3Storage"},
-    "staticfiles": {"BACKEND": "storages.backends.s3boto3.S3StaticStorage"}
+    "staticfiles": {"BACKEND": "storages.backends.s3boto3.S3StaticStorage"},
 }
 
 AWS_ACCESS_KEY_ID = settings.AWS_ACCESS_KEY_ID
@@ -162,10 +162,10 @@ AWS_STORAGE_BUCKET_NAME = settings.AWS_STORAGE_BUCKET_NAME
 
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 STATICFILES_DIR = [
@@ -185,20 +185,19 @@ INTERNAL_IPS = [
 ]
 
 
-
 # EDITOR
-CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
+AWS_QUERYSTRING_AUTH = False
 
 CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': 'full',
-        'extraPlugins': ','.join(
+    "default": {
+        "toolbar": "full",
+        "extraPlugins": ",".join(
             [
-                'codesnippet',
-            ]),
+                "codesnippet",
+            ]
+        ),
     },
 }
-
