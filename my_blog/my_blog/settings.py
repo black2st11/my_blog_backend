@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     "post",
     "qna",
     "corsheaders",
+    "ckeditor",
+    "ckeditor_uploader"
 ]
 
 MIDDLEWARE = [
@@ -150,8 +152,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATIC_ROOT = "/static"
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 STATICFILES_DIR = [
@@ -170,3 +174,20 @@ INTERNAL_IPS = [
     # ...
 ]
 
+
+
+# EDITOR
+CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'extraPlugins': ','.join(
+            [
+                'codesnippet',
+            ]),
+    },
+}
