@@ -8,7 +8,7 @@ from common.serializers import compact_create
 @pytest.mark.django_db(transaction=True)
 class TestPost:
     def test_create_post(self):
-        post_obj_in = {"title": "테스트 글"}
+        post_obj_in = {"title": "테스트 글", "content": "테스트 내용"}
         tag_obj_in = [Tag(**{"name": f"tag {i}"}) for i in range(3)]
 
         serializer = compact_create(PostSerializer, post_obj_in)
