@@ -2,7 +2,7 @@
     "production": {
         "aws_region": "ap-northeast-2",
         "django_settings": "my_blog.settings",
-        "profile_name": "default",
+        "profile_name": "moon",
         "project_name": "my-blog",
         "runtime": "python3.10",
         "s3_bucket": "moon-blog-zappa"
