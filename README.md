@@ -53,7 +53,7 @@
 
 ### 프론트(https://blog.black2st11.com)
 
-- 리포지토리: [https://github.com/black2st11/blog_front](프론트엔드 리포지토리) 참고
+- 리포지토리: (https://github.com/black2st11/blog_front)
 
 ### 전략
 
