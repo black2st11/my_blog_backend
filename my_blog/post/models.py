@@ -9,13 +9,14 @@ from info.models import Tag, Attach
 
 class Post(BaseModel):
     title = models.CharField("제목", max_length=100)
-    content = RichTextUploadingField('내용')
+    content = RichTextUploadingField("내용")
     tags = models.ManyToManyField(Tag, related_name="posts", through="post.PostTag")
     attach = models.ManyToManyField(
         Attach, related_name="posts", through="post.PostAttach"
     )
 
     class Meta:
+        ordering = ["-id"]
         db_table = "post"
         verbose_name = "게시판"
         verbose_name_plural = "게시판"

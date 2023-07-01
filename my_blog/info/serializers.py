@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer, BaseSerializer
 from collections import defaultdict
 
-from .models import Tag, Description, Skill
+from .models import Tag, Description, Skill, Attach
 
 
 class TagSerializer(ModelSerializer):
@@ -20,6 +20,12 @@ class SkillSerializer(ModelSerializer):
     class Meta:
         model = Skill
         fields = ["category", "name"]
+
+
+class AttachSerializer(ModelSerializer):
+    class Meta:
+        model = Attach
+        fields = ["name", "file"]
 
 
 class SkillMixin(BaseSerializer):

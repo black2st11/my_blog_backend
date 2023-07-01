@@ -37,6 +37,7 @@ class Achievement(BaseModel):
     )
 
     class Meta:
+        ordering = ["-id"]
         verbose_name_plural = "업적"
         verbose_name = "업적"
         db_table = "achievement"

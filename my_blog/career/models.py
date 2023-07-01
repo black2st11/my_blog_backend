@@ -1,4 +1,6 @@
 from django.db import models
+import datetime
+
 from info.models import Description, Skill, Attach
 from common.models import BaseModel
 
@@ -15,7 +17,7 @@ class Career(BaseModel):
     position = models.CharField("직책", max_length=50)
     work = models.CharField("맡은 일", max_length=50)
     start_date = models.DateField("시작날짜")
-    end_date = models.DateField("종료날짜")
+    end_date = models.DateField("종료날짜", null=True, blank=True)
     descriptions = models.ManyToManyField(
         Description, related_name="careers", through="career.CareerDescription"
     )
@@ -27,6 +29,7 @@ class Career(BaseModel):
     )
 
     class Meta:
+        ordering = ["-id"]
         db_table = "career"
         verbose_name = "길드"
         verbose_name_plural = "길드"
@@ -35,7 +38,10 @@ class Career(BaseModel):
         return self.name
 
     def calc_duration(self):
-        days = (self.end_date - self.start_date).days
+        end_date = self.end_date
+        if not end_date:
+            end_date = datetime.date.today()
+        days = (end_date - self.start_date).days
 
         if days < 28:
             return 0

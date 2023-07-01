@@ -37,6 +37,7 @@ class Dungeon(BaseModel):
     )
 
     class Meta:
+        ordering = ["-id"]
         db_table = "dungeon"
         verbose_name = "던전"
         verbose_name_plural = "던전"
