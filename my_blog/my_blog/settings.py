@@ -55,8 +55,7 @@ INSTALLED_APPS = [
     "post",
     "qna",
     "corsheaders",
-    "ckeditor",
-    "ckeditor_uploader",
+    "django_quill",
 ]
 
 MIDDLEWARE = [
@@ -187,17 +186,17 @@ INTERNAL_IPS = [
 
 # EDITOR
 
-CKEDITOR_UPLOAD_PATH = "uploads/"
+# CKEDITOR_UPLOAD_PATH = "uploads/"
 
-AWS_QUERYSTRING_AUTH = False
+# AWS_QUERYSTRING_AUTH = False
 
-CKEDITOR_CONFIGS = {
-    "default": {
-        "toolbar": "full",
-        "extraPlugins": ",".join(
-            [
-                "codesnippet",
-            ]
-        ),
-    },
-}
+# CKEDITOR_CONFIGS = {
+#     "default": {
+#         "toolbar": "full",
+#         "extraPlugins": ",".join(
+#             [
+#                 "codesnippet",
+#             ]
+#         ),
+#     },
+# }
